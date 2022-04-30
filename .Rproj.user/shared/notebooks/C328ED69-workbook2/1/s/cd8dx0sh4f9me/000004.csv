@@ -1,0 +1,17 @@
+"0","ws_be_sf %>% 
+  group_by(TierID) %>% 
+  mutate(., timelag = as.numeric(difftime(lead(DatetimeUTC),DatetimeUTC), units = ""secs""))
+"
+"1","Simple feature collection with 51246 features and 7 fields"
+"1","
+"
+"1","Geometry type: POINT
+"
+"1","Dimension:     XY
+"
+"1","Bounding box:  "
+"1","xmin: 2568153 ymin: 1202306 xmax: 2575154 ymax: 1207609"
+"1","
+"
+"1","Projected CRS: CH1903+ / LV95
+"

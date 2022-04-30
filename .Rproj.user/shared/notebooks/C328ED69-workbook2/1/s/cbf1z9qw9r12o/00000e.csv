@@ -1,0 +1,12 @@
+"0","ws_be_sf %>% 
+  st_drop_geometry() %>% 
+  group_by(TierID, TierName) %>% 
+  summarise(pings = n(),
+            start_time = min(DatetimeUTC), 
+            end_time = max(DatetimeUTC),
+            sample_interval = mean(timelag, na.rm = T),
+            tracking_time = sum(timelag, na.rm = T))
+"
+"1","[38;5;232m`summarise()` has grouped output by 'TierID'. You can
+override using the `.groups` argument.[39m
+"

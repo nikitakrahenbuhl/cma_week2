@@ -1,6 +1,8 @@
 ---
 title: "Exercise 2"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 # Preparation
@@ -10,11 +12,16 @@ Managed to setup Github credentials.
 
 ## Task 1: Import data
 ### Load necessary Packages
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(lubridate)
 library(sf)
 library(terra)
+library(ggpubr)
+
+theme_set(
+  theme_classic()
+)
 ```
 
 ### Import downloaded csv
@@ -24,4 +31,41 @@ ws_be_sf <- st_as_sf(ws_be, coords = c("E", "N"), crs = 2056, remove = FALSE)
 ```
 
 ## Taks 2: Getting an overview
+Lets first have a look at the difftime function
+```{r}
+ws_be_sf %>% 
+  group_by(TierID) %>% 
+  mutate(., timelag = as.integer(difftime(lead(DatetimeUTC),DatetimeUTC), units = "secs")) -> ws_be_sf
+```
+Now we have our data with a timelag - lets examine it a bit closer.
 
+**How many individuals were tracked**
+```{r}
+ws_be_sf %>% 
+  st_drop_geometry() %>% 
+  group_by(TierID, TierName) %>% 
+  summarise(pings = n(),
+            start_time = min(DatetimeUTC), 
+            end_time = max(DatetimeUTC),
+            sample_interval = mean(timelag, na.rm = T),
+            tracking_time = sum(timelag, na.rm = T)) %>% 
+    mutate(tracking_time_days = days(day(seconds_to_period(tracking_time)))) 
+  
+```
+Now lets create visualisations
+```{r}
+ggplot(data = ws_be_sf) +
+  geom_line(aes(x = DatetimeUTC, y = TierID)) -> p1
+
+ggplot(data = ws_be_sf) +
+  geom_bar(aes(x = timelag, fill = TierID), stat = "count") 
+```
+
+## Task 3: Deriving movement parameters
+```{r}
+ws_be_sf %>% 
+  mutate(steplength = sqrt((E - lead(E,1))^2 + (N - lead(N,1))^2),
+         speed = steplength/timelag)
+
+```
+The units are meters per second.
