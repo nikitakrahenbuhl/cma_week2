@@ -1,0 +1,25 @@
+---
+title: "Exercise 2"
+output: html_notebook
+---
+
+# Preparation
+Managed to setup Github credentials.
+
+# Tasks and Inputs
+
+## Task 1: Import data
+### Load necessary Packages
+```{r}
+library(tidyverse)
+library(lubridate)
+library(sf)
+library(terra)
+```
+
+### Import downloaded csv
+```{r}
+ws_be <- read_csv("0_rawdata/wildschwein_BE.csv")
+ws_be_sf <- st_as_sf(ws_be, coords = c("E", "N"), crs = 2056, remove = FALSE)
+```
+

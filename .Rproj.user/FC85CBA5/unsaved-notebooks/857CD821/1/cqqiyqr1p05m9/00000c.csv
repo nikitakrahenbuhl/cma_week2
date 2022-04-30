@@ -1,0 +1,11 @@
+"0","ws_be_sf <- st_as_sf(ws_be, coords = c(""E"", ""N""), crs = 2056, remove = FALSE)
+"
+"1","[1m[33mError[39m in [38;5;232m`vectbl_as_col_location()`[39m:[22m
+[33m![39m Can't subset columns that don't exist.
+[31mx[39m Columns `E` and `N` don't exist.
+Backtrace:
+[90m 1. [39m[1msf[22m::st_as_sf(ws_be, coords = c(""E"", ""N""), crs = 2056, remove = FALSE)
+[90m 2. [39msf:::st_as_sf.data.frame(...)
+[90m 8. [39m[1mtibble[22m:::`[.tbl_df`(x, coords)
+[90m 9. [39mtibble:::vectbl_as_col_location(...)
+"
