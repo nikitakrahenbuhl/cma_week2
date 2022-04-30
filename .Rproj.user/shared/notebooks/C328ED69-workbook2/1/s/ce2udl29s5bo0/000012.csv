@@ -1,0 +1,5 @@
+"0","rbind(caro, caro_3, caro_6, caro_9) -> caro_merge
+"
+"2","Error in rbind(deparse.level, ...) : 
+  numbers of columns of arguments do not match
+"

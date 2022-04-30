@@ -3,7 +3,7 @@
     "path": "~/Documents/Masters/PandT/week2/exercise2/workbook2.Rmd",
     "project_path": "workbook2.Rmd",
     "type": "r_markdown",
-    "hash": "1000759",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1651308538179.0,
@@ -14,15 +14,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "70,32",
-        "scrollLine": "70"
+        "cursorPosition": "128,0",
+        "scrollLine": "128"
     },
     "folds": "",
-    "lastKnownWriteTime": 1651313633,
+    "lastKnownWriteTime": 1651318097,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1651313633357,
+    "last_content_update": 1651318097779,
     "read_only": false,
     "read_only_alternatives": []
 }

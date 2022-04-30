@@ -61,7 +61,7 @@ ggplot(data = ws_be_sf) +
   geom_bar(aes(x = timelag, fill = TierID), stat = "count") 
 ```
 
-## Task 3: Deriving movement parameters
+## Task 3: Deriving movement parameters - Speed
 ```{r}
 ws_be_sf %>% 
   mutate(steplength = sqrt((E - lead(E,1))^2 + (N - lead(N,1))^2),
@@ -69,3 +69,61 @@ ws_be_sf %>%
 
 ```
 The units are meters per second.
+
+## Task 4: Cross-scale movement analysis
+Load the data:
+```{r}
+caro <- read_csv("0_rawdata/caro60.csv")
+
+caro_sf <- st_as_sf(caro, coords = c("E", "N"), crs = 2056, remove = FALSE)
+
+caro_sf %>% 
+  slice(seq(from=1, to = 200, by = 3)) -> caro_3
+caro_sf %>% 
+  slice(seq(from=1, to = 200, by = 6)) -> caro_6
+caro_sf %>% 
+  slice(seq(from=1, to = 200, by = 9)) -> caro_9
+```
+
+Calculate timelag, steplength and speed
+```{r}
+calculator <- function(df_input, interval){
+  df_input %>% 
+    mutate(timelag = as.numeric(difftime(lead(DatetimeUTC),DatetimeUTC), units = "secs"), 
+           steplength = sqrt((E - lead(E,1))^2 + (N - lead(N,1))^2),
+         speed = steplength/timelag,
+         interval = interval) -> df_output
+  
+  return(df_output)
+} 
+
+calculator(caro_sf, "1 minute") -> caro
+calculator(caro_3, "3 minutes") -> caro_3
+calculator(caro_6, "6 minutes") -> caro_6
+calculator(caro_9, "9 minutes") -> caro_9
+
+rbind(caro, caro_3, caro_6, caro_9) -> caro_merge
+
+```
+
+```{r}
+ggplot() +
+  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
+  geom_sf(data = caro_3, aes(x = E, y = N, color = "3 minutes")) -> p1
+
+ggplot() +
+  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
+  geom_sf(data = caro_6, aes(x = E, y = N, color = "6 minutes")) -> p2
+
+ggplot() +
+  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
+  geom_sf(data = caro_9, aes(x = E, y = N, color = "9 minutes"))-> p3
+
+ggplot(data = caro_merge) +
+  geom_line(aes(x = DatetimeUTC, y = speed, color = interval))
+
+ggplot(data = caro_merge) +
+  geom_sf(aes(x = E, y = N, color = interval)) 
+            
+```
+

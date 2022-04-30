@@ -1,0 +1,32 @@
+"0","ggplot() +"
+"0","  geom_sf(data = caro_sf, aes(x = E, y = N, color = ""1 minute"")) +"
+"0","  geom_sf(data = caro_3, aes(x = E, y = N, color = ""3 minutes"")) -> p1"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"0","ggplot() +"
+"0","  geom_sf(data = caro_sf, aes(x = E, y = N, color = ""1 minute"")) +"
+"0","  geom_sf(data = caro_6, aes(x = E, y = N, color = ""6 minutes"")) -> p2"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"0","ggplot() +"
+"0","  geom_sf(data = caro_sf, aes(x = E, y = N, color = ""1 minute"")) +"
+"0","  geom_sf(data = caro_9, aes(x = E, y = N, color = ""9 minutes""))-> p3"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
+"0","ggplot(data = caro_merge) +"
+"0","  geom_line(aes(x = DatetimeUTC, y = speed, color = interval))"
+"2","Warning:"
+"2"," Removed 4 row(s) containing missing values (geom_path).
+"

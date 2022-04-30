@@ -1,0 +1,21 @@
+"0","caro <- read_csv(""0_rawdata/caro60.csv"")"
+"1","[1mRows: [22m[34m200[39m [1mColumns: [22m[34m6[39m
+"
+"1","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (2): TierID, TierName
+[32mdbl[39m  (3): CollarID, E, N
+[34mdttm[39m (1): DatetimeUTC
+"
+"1","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","caro_sf <- st_as_sf(caro, coords = c(""E"", ""N""), crs = 2056, remove = FALSE)"
+"0",""
+"0","caro_sf %>% "
+"0","  slice(seq(from=1, to = 200, by = 3)) -> caro_3"
+"0","caro_sf %>% "
+"0","  slice(seq(from=1, to = 200, by = 6)) -> caro_6"
+"0","caro_sf %>% "
+"0","  slice(seq(from=1, to = 200, by = 9)) -> caro_9"

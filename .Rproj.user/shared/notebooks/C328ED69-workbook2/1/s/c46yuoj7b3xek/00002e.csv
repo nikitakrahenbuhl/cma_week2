@@ -1,0 +1,5 @@
+"0","ggplot(data = caro_merge) +"
+"0","  geom_sf(aes(x = E, y = N, color = interval)) "
+"2","Warning:"
+"2"," Ignoring unknown aesthetics: x, y
+"
