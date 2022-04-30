@@ -1,3 +1,0 @@
-"0","ws_be_sf %>% "
-"0","  group_by(TierID) %>% "
-"0","  mutate(., timelag = as.integer(difftime(lead(DatetimeUTC),DatetimeUTC), units = ""secs"")) -> ws_be_sf"

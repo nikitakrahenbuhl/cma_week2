@@ -19,6 +19,7 @@ library(sf)
 library(terra)
 library(ggpubr)
 library(tmap)
+library(RColorBrewer)
 
 theme_set(
   theme_classic()
@@ -36,7 +37,10 @@ Lets first have a look at the difftime function
 ```{r}
 ws_be_sf %>% 
   group_by(TierID) %>% 
-  mutate(., timelag = as.integer(difftime(lead(DatetimeUTC),DatetimeUTC), units = "secs")) -> ws_be_sf
+  mutate(timelag = as.integer(difftime(lead(DatetimeUTC),DatetimeUTC), units = "secs")) -> ws_be_sf
+
+
+
 ```
 Now we have our data with a timelag - lets examine it a bit closer.
 
@@ -48,18 +52,24 @@ ws_be_sf %>%
   summarise(pings = n(),
             start_time = min(DatetimeUTC), 
             end_time = max(DatetimeUTC),
-            sample_interval = mean(timelag, na.rm = T),
-            tracking_time = sum(timelag, na.rm = T)) %>% 
-    mutate(tracking_time_days = days(day(seconds_to_period(tracking_time)))) 
+            avg_interval = mean(timelag, na.rm = T),
+            total_tracking_time = sum(timelag, na.rm = T)) %>% 
+    mutate(tracking_time_days = days(day(seconds_to_period(total_tracking_time)))) 
   
 ```
-Now lets create visualisations
+Now lets create visualisations of the same information.
 ```{r}
-ggplot(data = ws_be_sf) +
-  geom_line(aes(x = DatetimeUTC, y = TierID)) -> p1
+ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = TierID)) +
+  geom_line()
 
-ggplot(data = ws_be_sf) +
-  geom_bar(aes(x = timelag, fill = TierID), stat = "count") 
+ggplot(data = ws_be_sf, aes(x = timelag)) +
+  geom_bar()  #I can't seem to get this to work 
+
+ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = timelag, color = TierID)) +
+  geom_line()
+
+ggplot(data = ws_be_sf, aes(x=TierID, y = timelag)) +
+  geom_boxplot()
 ```
 
 ## Task 3: Deriving movement parameters - Speed
@@ -134,10 +144,25 @@ caro_merge %>%
 
 ggarrange(p1, p2, p3)
 ```
-# Task 5: Deriving movement parameters II: Rolling window functions
+
+## Task 5: Deriving movement parameters II: Rolling window functions
 ```{r}
 library(zoo)
-rollmean(caro$speed, k = 3)
+
+caro %>% 
+  mutate(rollspeed_k3 = rollmean(caro$speed, k=3, na.pad = TRUE),
+         rollspeed_k6 = rollmean(caro$speed, k=6, na.pad = TRUE),
+         rollspeed_k9 = rollmean(caro$speed, k=9, na.pad = TRUE),
+         rollspeed_k12 = rollmean(caro$speed, k=12, na.pad = TRUE),
+         rollspeed_k24 = rollmean(caro$speed, k=24, na.pad = TRUE)) -> test
+
+ggplot(data = test) +
+  geom_line(aes(x = DatetimeUTC, y = speed, color = "speed")) +
+  geom_line(aes(x = DatetimeUTC, y = rollspeed_k3, color = "K3")) +
+  geom_line(aes(x = DatetimeUTC, y = rollspeed_k3, color = "K6")) +
+  geom_line(aes(x = DatetimeUTC, y = rollspeed_k3, color = "K9")) +
+  geom_line(aes(x = DatetimeUTC, y = rollspeed_k12, color = "K12")) +
+  geom_line(aes(x = DatetimeUTC, y = rollspeed_k24, color = "K24"))
 
 ```
 
