@@ -18,6 +18,7 @@ library(lubridate)
 library(sf)
 library(terra)
 library(ggpubr)
+library(tmap)
 
 theme_set(
   theme_classic()
@@ -107,23 +108,37 @@ rbind(caro, caro_3, caro_6, caro_9) -> caro_merge
 ```
 
 ```{r}
-ggplot() +
-  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
-  geom_sf(data = caro_3, aes(x = E, y = N, color = "3 minutes")) -> p1
-
-ggplot() +
-  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
-  geom_sf(data = caro_6, aes(x = E, y = N, color = "6 minutes")) -> p2
-
-ggplot() +
-  geom_sf(data = caro_sf, aes(x = E, y = N, color = "1 minute")) +
-  geom_sf(data = caro_9, aes(x = E, y = N, color = "9 minutes"))-> p3
-
 ggplot(data = caro_merge) +
   geom_line(aes(x = DatetimeUTC, y = speed, color = interval))
 
-ggplot(data = caro_merge) +
-  geom_sf(aes(x = E, y = N, color = interval)) 
-            
+caro_merge %>% 
+  filter(interval == "1 minute" | interval  == "3 minutes") %>% 
+  ggplot(data = ., aes(x = E, y = N, color = interval, alpha = interval)) +
+    geom_path() +
+    geom_point() +
+  scale_alpha_discrete(range = c(0.4, 1)) -> p1
+
+caro_merge %>% 
+  filter(interval == "1 minute" | interval  == "6 minutes") %>% 
+  ggplot(data = ., aes(x = E, y = N, color = interval, alpha = interval)) +
+    geom_path() +
+    geom_point() +
+  scale_alpha_discrete(range = c(0.4, 1)) -> p2
+
+caro_merge %>% 
+  filter(interval == "1 minute" | interval  == "9 minutes") %>% 
+  ggplot(data = ., aes(x = E, y = N, color = interval, alpha = interval)) +
+    geom_path() +
+    geom_point() +
+  scale_alpha_discrete(range = c(0.4, 1)) -> p3
+
+ggarrange(p1, p2, p3)
 ```
+# Task 5: Deriving movement parameters II: Rolling window functions
+```{r}
+library(zoo)
+rollmean(caro$speed, k = 3)
+
+```
+
 
