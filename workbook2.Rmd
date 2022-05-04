@@ -28,7 +28,7 @@ theme_set(
 
 ### Import downloaded csv
 ```{r}
-ws_be <- read_csv("0_rawdata/wildschwein_BE.csv")
+ws_be <- read_csv("0_rawdata/wildschwein_BE_2056.csv")
 ws_be_sf <- st_as_sf(ws_be, coords = c("E", "N"), crs = 2056, remove = FALSE)
 ```
 
@@ -38,9 +38,6 @@ Lets first have a look at the difftime function
 ws_be_sf %>% 
   group_by(TierID) %>% 
   mutate(timelag = as.integer(difftime(lead(DatetimeUTC),DatetimeUTC), units = "secs")) -> ws_be_sf
-
-
-
 ```
 Now we have our data with a timelag - lets examine it a bit closer.
 
@@ -62,8 +59,11 @@ Now lets create visualisations of the same information.
 ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = TierID)) +
   geom_line()
 
-ggplot(data = ws_be_sf, aes(x = timelag)) +
-  geom_bar()  #I can't seem to get this to work 
+ws_be_sf %>% 
+  filter(timelag < 15000) %>% 
+  ggplot(data = ., aes(timelag), fill = TierID) +
+    geom_bar(position=position_dodge()) + facet_wrap(~TierID)  #I can't seem to get this to work 
+
 
 ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = timelag, color = TierID)) +
   geom_line()
