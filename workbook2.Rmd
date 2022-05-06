@@ -62,7 +62,12 @@ ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = TierID)) +
 ws_be_sf %>% 
   filter(timelag < 15000) %>% 
   ggplot(data = ., aes(timelag), fill = TierID) +
-    geom_bar(position=position_dodge()) + facet_wrap(~TierID)  #I can't seem to get this to work 
+    geom_bar(position=position_dodge()) + facet_wrap(~TierID)  #Need to log this
+
+ws_be_sf %>% 
+  filter(timelag < 15000) %>% 
+  ggplot(data = ., aes(timelag), fill = TierID) +
+    geom_bar() + scale_y_log10()  #Perfect
 
 
 ggplot(data = ws_be_sf, aes(x = DatetimeUTC, y = timelag, color = TierID)) +
